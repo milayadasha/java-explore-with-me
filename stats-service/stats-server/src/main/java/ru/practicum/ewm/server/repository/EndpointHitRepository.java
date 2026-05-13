@@ -16,7 +16,8 @@ public interface EndpointHitRepository extends JpaRepository<EndpointHit, Long> 
             " WHERE h.timestamp >= ?1" +
             " AND h.timestamp <= ?2" +
             " AND (?3 IS NULL OR h.uri IN ?3)" +
-            " GROUP BY h.app, h.uri")
+            " GROUP BY h.app, h.uri" +
+            " ORDER BY COUNT(h) DESC")
     List<StatsProjection> findNonUniqueStats(LocalDateTime start, LocalDateTime end, List<String> uris);
 
     @Query("SELECT h.app as app, h.uri as uri, COUNT(DISTINCT h.ip) as hits" +
@@ -24,6 +25,7 @@ public interface EndpointHitRepository extends JpaRepository<EndpointHit, Long> 
             " WHERE h.timestamp >= ?1" +
             " AND h.timestamp <= ?2" +
             " AND (?3 IS NULL OR h.uri IN ?3)" +
-            " GROUP BY h.app, h.uri")
+            " GROUP BY h.app, h.uri" +
+            " ORDER BY COUNT(h) DESC")
     List<StatsProjection> findUniqueStats(LocalDateTime start, LocalDateTime end, List<String> uris);
 }
